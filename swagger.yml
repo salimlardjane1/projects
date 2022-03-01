@@ -1,0 +1,134 @@
+swagger: "2.0"
+info:
+  description: Fichier swagger associé à notre API
+  version: "1.0.0"
+  title: Swagger pour API ReST
+consumes:
+  - application/json
+produces:
+  - application/json
+
+basePath: /api
+
+# Chemins supportés
+paths:
+  /people:
+    get:
+      operationId: people.read_all
+      tags:
+        - People
+      summary: Lecture de la liste entière
+      description: Lire la liste de personnes
+      parameters:
+        - name: length
+          in: query
+          type: integer
+          description: Nombre de personnes dont on récupère les données dans people
+          required: false
+        - name: offset
+          in: query
+          type: integer
+          description: Offset de début de liste où lire les données
+          required: false
+      responses:
+        200:
+          description: Succès dans la lecture
+          schema:
+            type: array
+            items:
+              properties:
+                fname:
+                  type: string
+                lname:
+                  type: string
+                timestamp:
+                  type: string
+
+    post:
+      operationId: people.create
+      tags:
+        - people
+      summary: Enregistrer une personne dans la liste people
+      description: Créer un nouvel enregistrement dans la lsite people
+      parameters:
+        - name: person
+          in: body
+          description: Enregistrement à créer
+          required: True
+          schema:
+            type: object
+            properties:
+              fname:
+                type: string
+                description: Prénom de la personne
+              lname:
+                type: string
+                description: Nom de famille de la personne
+      responses:
+        201:
+          description: Succès dans création
+
+  /people/{lname}:
+    get:
+      operationId: people.read_one
+      tags:
+        - people
+      summary: Lire les données d'une personne dans la liste people
+      description: Lire un enregistrement dans la liste people
+      parameters:
+        - name: lname
+          in: path
+          description: Nom de famille de la personne
+          type: string
+          required: True
+      responses:
+        200:
+          description: Succès dans la lecture
+          schema:
+            properties:
+              fname:
+                type: string
+              lname:
+                type: string
+              timestamp:
+                type: string
+
+    put:
+      operationId: people.update
+      tags:
+        - people
+      summary: Mettre jour les données d'une personne dans la liste people
+      description: Mettre à jour un enregistremnt
+      parameters:
+        - name: lname
+          in: path
+          description: Nom de famille de la personne
+          type: string
+          required: True
+        - name: person
+          in: body
+          schema:
+            type: object
+            properties:
+              fname:
+                type: string
+              lname:
+                type: string
+      responses:
+        200:
+          description: Succès dans la mise à jour
+
+    delete:
+      operationId: people.delete
+      tags:
+        - people
+      summary: Supprimer une personne de la liste people
+      description: Supprimer un enregistrement
+      parameters:
+        - name: lname
+          in: path
+          type: string
+          required: True
+      responses:
+        200:
+          description: Succès dans la suppression
